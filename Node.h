@@ -10,13 +10,13 @@ class Node {
 		Node () : firstCh(NULL), nextSib(NULL) {}
 		Node (Element elem) : firstCh(NULL), nextSib(NULL), e(elem) {}
 		Node (Element elem, Node* fc, Node* ns) {e = elem; firstCh = fc; nextSib = ns;}
-		Node (const NodoA& n){firstCh = n.firstCh; nextSib = n.nextSib; e = n.e;}
+		Node (const Node& n){firstCh = n.firstCh; nextSib = n.nextSib; e = n.e;}
 		Element element() {return e;}
 		Node* firstChild() {return firstCh;}
 		Node* nextSibling() {return nextSib;}
-		void setElement(T e){info = e;}
-		void setFirstChild (NodoA* hiz) {firstCh = hiz;}
-		void setNextSibling (NodoA* hde) {nextSib = hde;}
+		void setElement(Element elem){e = elem;}
+		void setFirstChild (Node* hiz) {firstCh = hiz;}
+		void setNextSibling (Node* hde) {nextSib = hde;}
 };
 
 
