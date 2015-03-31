@@ -13,11 +13,18 @@ class DOM_Tree{
 		Node* raiz;
 		
 	public:
-		DOM_Tree(){
-			Element elem("document"); //crea el elemento document
-			raiz = new Node (elem); //asigna el nodo raiz
-		}
-	
+		DOM_Tree();
+		DOM_Tree(Element elem, list<DOM_Tree> L); //Parametro Elem y una lista con sus hijos
+		void appendChild(DOM_Tree DT, int p); //Agrega un arbol como hijo en la posicion indicada
+		void appendChild(string cHtml, int p); //Agrega un hijo a partir de codigo HTML en la posicion indicada
+		void appendChild(DOM_Tree DT); //Agrega un arbol como ultimo hijo
+		void appendChild(string cHtml); //Agrega como ultimo hijo a partir de codigo HTML
+		void removeChild(int p); //elimina el hijo de la posicion p del arbol
+		void replaceChild(DOM_Tree DT, int p); //reemplaza el arbol de la posicion indicada
+		void replaceChild(string cHtml, int p); //reemplaza el arbol de la posicion indicada
+		DOM_Tree childNode(int p); //devuelve el hijo correspondiente a la posicion p del arbol
+		//DOM_Tree getElementByID (??? ID);
+		~DOM_Tree();
 };
 
 
