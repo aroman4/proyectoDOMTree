@@ -11,10 +11,11 @@ using namespace std;
 class DOM_Tree{
 	private:
 		Node* raiz;
-		
+		Node* copiarNodos(Node *p);
 	public:
 		DOM_Tree();
 		DOM_Tree(Element elem, list<DOM_Tree> L); //Parametro Elem y una lista con sus hijos
+		DOM_Tree(const DOM_Tree& DT) {raiz = copiarNodos(DT.raiz);}
 		void appendChild(DOM_Tree DT, int p); //Agrega un arbol como hijo en la posicion indicada
 		void appendChild(string cHtml, int p); //Agrega un hijo a partir de codigo HTML en la posicion indicada
 		void appendChild(DOM_Tree DT); //Agrega un arbol como ultimo hijo
@@ -24,7 +25,7 @@ class DOM_Tree{
 		void replaceChild(string cHtml, int p); //reemplaza el arbol de la posicion indicada
 		DOM_Tree childNode(int p); //devuelve el hijo correspondiente a la posicion p del arbol
 		//DOM_Tree getElementByID (??? ID);
-		~DOM_Tree();
+		//~DOM_Tree();
 };
 
 
