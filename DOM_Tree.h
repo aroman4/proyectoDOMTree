@@ -27,7 +27,7 @@ class DOM_Tree{
 		void replaceChild(DOM_Tree DT, int p); //reemplaza el arbol de la posicion indicada
 		void replaceChild(string cHtml, int p); //reemplaza el arbol de la posicion indicada
 		DOM_Tree childNode(int p); //devuelve el hijo correspondiente a la posicion p del arbol
-		//DOM_Tree getElementByID (??? ID);
+		DOM_Tree getElementByID (string ID); //cada element tiene un id
 		~DOM_Tree(){destruirNodos(doc);}
 };
 
