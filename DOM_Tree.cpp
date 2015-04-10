@@ -134,3 +134,62 @@ DOM_Tree DOM_Tree :: childNode(int p){
 	return DT;
 	
 }
+
+Element DOM_Tree :: createElement (string html){
+	//DOM_Tree T;
+	Element e;
+	int i,j;
+	string tag,id;
+	list<string> attL;
+	
+	i=0;
+	if( html.at(i) == '<' ){ //si abre <
+		i++; //se coloca en la siguiente posicion
+		while((html.at(i) != ' ')&&(html.at(i) != '>')&&(i < html.length())){ //mientras no consiga un espacio o un >, lee el tagName
+			tag.push_back(html.at(i)); //inserto el caracter al final del string tag
+			i++;
+		}
+		e.setTagName (tag); //inserto el tag name
+		
+		//atributos
+		if(html.at(i) != '>'){
+			if(html.at(i) == ' '){ //si el caracter actual es un espacio, prosigue
+				i++; //siguiente pos
+				j=i; //guardo la pos de i
+				//verifico si hay un id explicito
+				while((html.at(j) != '=')&&(i < html.length())){
+					id.push_back(html.at(j));
+					j++;
+				}
+				i=j;
+				i+=2; //avanza i dos posiciones
+				if(id == "id"){ //si hay un id explicito
+					id.clear(); //limpio la cadena
+					while((html.at(i) != '"')&&(html.at(i) != '\'')&&(i < html.length())){ //mientras no consiga una comilla
+						id.push_back(html.at(i));
+						i++;
+					}
+					i++;
+				}else{
+					id = tag; //si no hay un id explicito asigno el tagname como id
+				}
+				e.setID(id); //asigno el id
+				
+				while((html.at(i) == ' ')&&(i < html.length())){ //lee los atributos
+					i++;
+					string att;
+					while((html.at(i) != ' ')&&(html.at(i) != '>')&&(i < html.length())){ //mientras no consiga un espacio
+						att.push_back(html.at(i));
+						i++;
+					}
+					attL.push_back(att); //inserto el atributo en la lista
+				}
+				e.setAttributeList(attL);
+			}
+		}
+		//leer html interno hasta que consiga un < , si consigue un < entonces llama recursivamente a la funcion
+		//devuelve un nodo, y luego otro metodo une todos los nodos y crea arbol
+	}
+	
+	return e;
+}
