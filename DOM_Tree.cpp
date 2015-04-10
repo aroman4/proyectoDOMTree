@@ -135,14 +135,15 @@ DOM_Tree DOM_Tree :: childNode(int p){
 	
 }
 
-Element DOM_Tree :: createElement (string html){
-	//DOM_Tree T;
+DOM_Tree DOM_Tree :: createTree (string html, int &i){
+	DOM_Tree T;
 	Element e;
-	int i,j;
-	string tag,id;
+	int j;
+	string tag,id,htmlInt,cTag;
 	list<string> attL;
 	
-	i=0;
+	T.raiz = new Node ();
+	
 	if( html.at(i) == '<' ){ //si abre <
 		i++; //se coloca en la siguiente posicion
 		while((html.at(i) != ' ')&&(html.at(i) != '>')&&(i < html.length())){ //mientras no consiga un espacio o un >, lee el tagName
@@ -169,7 +170,7 @@ Element DOM_Tree :: createElement (string html){
 						id.push_back(html.at(i));
 						i++;
 					}
-					i++;
+					i++;//se coloca en la siguiente posicion
 				}else{
 					id = tag; //si no hay un id explicito asigno el tagname como id
 				}
@@ -184,12 +185,34 @@ Element DOM_Tree :: createElement (string html){
 					}
 					attL.push_back(att); //inserto el atributo en la lista
 				}
-				e.setAttributeList(attL);
+				e.setAttributeList(attL); //inserta la lista de atributos
 			}
 		}
-		//leer html interno hasta que consiga un < , si consigue un < entonces llama recursivamente a la funcion
-		//devuelve un nodo, y luego otro metodo une todos los nodos y crea arbol
+		if(html.at(i) == '>'){ //si cierra leer html interno hasta que consiga un < , si consigue un < entonces llama recursivamente a la funcion
+			i++;//se coloca en la siguiente posicion
+			while(i < html.length()){
+				while((html.at(i) != '<')&&(i < html.length())){ //mientras no consiga <, lee el html interno
+					htmlInt.push_back(html.at(i));
+					i++;
+				}
+				j=i+1;
+				if(html.at(j) == '/'){ //si en la pos j hay un /
+					i=j+1;
+					while(html.at(i) != '>'){
+						cTag.push_back(html.at(i));
+						i++;
+					}
+					if(cTag == tag){ //si cTag es igual a tag entonces se cierra la etiqueta
+						T.raiz->setElement(e); //asigno el element al node
+						return T;
+					}
+					
+				}else{ //si el caracter en la pos j no es un /
+					T.appendChild(createTree(html,i); //llama recursivamente y agrega el arbol como ultimo hijo
+				}
+				i++
+			}
+			
+		}
 	}
-	
-	return e;
 }
