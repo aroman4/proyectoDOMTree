@@ -36,18 +36,17 @@ Node* DOM_Tree :: copiarNodos(Node *p){
 
 DOM_Tree& DOM_Tree :: operator=(const DOM_Tree& A){ //sobrecarga asignacion
 	if(this != &A){//si son diferentes y A no es nulo
-		this->doc=copiarNodos(A.doc);
+		this->raiz=copiarNodos(A.raiz);
+		updateDoc();
 	}
 	return *this;
 }
 
 void DOM_Tree :: appendChild(string cHtml, int p){
-	int i=0; //i indica la posicion del string
 	appendChild(createTree(cHtml),p);
 }
 
 void DOM_Tree :: appendChild(string cHtml){
-	int i=0; //i indica la posicion del string
 	appendChild(createTree(cHtml));
 }
 
@@ -289,6 +288,10 @@ Node* DOM_Tree :: createNode (string& html, int &i){
 	}
 }
 
+ostream& operator<<(ostream &output,DOM_Tree &T){
+	T.viewTree();
+}
+
 void DOM_Tree :: viewTree(Node *p){
 	Element e;
 	list<string> attL;
@@ -313,6 +316,7 @@ void DOM_Tree :: viewTree(Node *p){
 		cout << ">";
 		if(!e.innerHTML().empty()){ //si existe inner HTML
 			cout << e.innerHTML();
+			
 		}else{ //si no existe innerhtml
 			cout << "\n\t";
 		}
@@ -321,4 +325,34 @@ void DOM_Tree :: viewTree(Node *p){
 		viewTree(p->nextSibling());
 		
 	}
+}
+
+DOM_Tree DOM_Tree :: getElementByID (string ID){
+	DOM_Tree T;
+	
+	T.raiz = posElem(ID,this->raiz);
+	T.updateDoc();
+	
+	return T;
+	
+}
+
+Node* DOM_Tree :: posElem (string ID, Node* P){ //busca y devuelve la direccion del elemento si se encuentra en el arbol
+	Node* ret;
+	ret = NULL;
+	
+	if(P!=NULL){
+		if(P->element().ID() == ID){
+			ret = P;
+		}else{
+			if (ret == NULL){ //aun no se ha encontrado el elemento
+				ret = posElem (ID, P->firstChild());
+			}
+			if (ret == NULL){ //aun no se ha encontrado el elemento
+				ret = posElem (ID, P->nextSibling());
+			}
+		}
+	}
+	
+	return ret;
 }
