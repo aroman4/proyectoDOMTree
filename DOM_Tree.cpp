@@ -43,12 +43,12 @@ DOM_Tree& DOM_Tree :: operator=(const DOM_Tree& A){ //sobrecarga asignacion
 
 void DOM_Tree :: appendChild(string cHtml, int p){
 	int i=0; //i indica la posicion del string
-	appendChild(createTree(cHtml,i),p);
+	appendChild(createTree(cHtml),p);
 }
 
 void DOM_Tree :: appendChild(string cHtml){
 	int i=0; //i indica la posicion del string
-	appendChild(createTree(cHtml,i));
+	appendChild(createTree(cHtml));
 }
 
 void DOM_Tree :: appendChild(DOM_Tree DT){
@@ -140,8 +140,7 @@ void DOM_Tree :: replaceChild(DOM_Tree DT, int p){
 }
 
 void DOM_Tree :: replaceChild(string cHtml, int p){
-	int i=0;
-	replaceChild(createTree(cHtml,i),p);
+	replaceChild(createTree(cHtml),p);
 }
 
 void DOM_Tree :: destruirNodos(Node*& p){
@@ -183,15 +182,38 @@ DOM_Tree DOM_Tree :: childNode(int p){
 	
 }
 
-DOM_Tree DOM_Tree :: createTree (string& html, int &i){
+void Node :: appendNode(Node* pt){
+	
+	if(this->firstChild() == NULL){
+		this->setFirstChild (pt);
+	}else{
+		Node *aux;
+		aux = this->firstChild();
+		while(aux->nextSibling() != NULL){
+			aux = aux->nextSibling();
+		}
+		aux->setNextSibling(pt);
+	}
+}
+
+DOM_Tree DOM_Tree :: createTree (string& html){
 	DOM_Tree T;
+	int i = 0;
+	
+	T.raiz = createNode(html,i);
+	T.updateDoc();
+	
+	return T;
+}
+
+Node* DOM_Tree :: createNode (string& html, int &i){
+	Node *N;
 	Element e;
 	int j;
 	string tag,id,htmlInt,cTag;
 	list<string> attL;
 	
-	T.raiz = new Node ();
-	updateDoc();
+	N = new Node ();
 	
 	if( html.at(i) == '<' ){ //si abre <
 		i++; //se coloca en la siguiente posicion
@@ -244,6 +266,7 @@ DOM_Tree DOM_Tree :: createTree (string& html, int &i){
 					htmlInt.push_back(html.at(i));
 					i++;
 				}
+				e.setInnerHTML(htmlInt);
 				j=i+1;
 				if(html.at(j) == '/'){ //si en la pos j hay un /
 					i=j+1;
@@ -252,12 +275,12 @@ DOM_Tree DOM_Tree :: createTree (string& html, int &i){
 						i++;
 					}
 					if(cTag == tag){ //si cTag es igual a tag entonces se cierra la etiqueta
-						T.raiz->setElement(e); //asigno el element al node
-						return T;
+						N->setElement(e); //asigno el element al node
+						return N;
 					}
 					
 				}else{ //si el caracter en la pos j no es un /
-					T.appendChild(createTree(html,i)); //llama recursivamente y agrega el arbol como ultimo hijo
+					N->appendNode(createNode(html,i)); //llama recursivamente y agrega el nodo como ultimo hijo
 				}
 				i++;
 			}
@@ -274,7 +297,8 @@ void DOM_Tree :: viewTree(Node *p){
 		e = p->element(); //obtengo el element
 		
 		cout << "<" << e.tagName();
-		if(e.ID() != e.tagName()){ //si existe ID se imprime
+		
+		if((e.ID() != e.tagName())&&(!e.ID().empty())){ //si existe ID se imprime
 			cout << " id=\"" << e.ID() << "\"";
 		}
 		
