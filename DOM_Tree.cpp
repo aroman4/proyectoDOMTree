@@ -54,13 +54,13 @@ void DOM_Tree :: appendChild(DOM_Tree DT){
 	Node *aux;
 	if(raiz != NULL){
 		if(raiz->firstChild() == NULL){
-			raiz->setFirstChild(copiarNodos(DT.raiz->firstChild()));
+			raiz->setFirstChild(copiarNodos(DT.raiz));
 		}else{
 			aux = raiz->firstChild();
 			while(aux->nextSibling() != NULL){
 				aux = aux->nextSibling();
 			}
-			aux->setNextSibling(copiarNodos(DT.raiz->firstChild()));
+			aux->setNextSibling(copiarNodos(DT.raiz));
 		}
 	}else{
 		raiz = copiarNodos(DT.raiz);
