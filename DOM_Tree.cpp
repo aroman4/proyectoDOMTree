@@ -13,6 +13,17 @@ DOM_Tree :: DOM_Tree(){
 	raiz = NULL;
 }
 
+DOM_Tree :: DOM_Tree(Element elem, list<DOM_Tree> L){
+	raiz = new Node(elem); //asigno el elemento
+	updateDoc();
+	
+	list<DOM_Tree>::iterator it;
+	
+	for(it = L.begin(); it != L.end(); it++){ //recorro la lista
+		appendChild(*it); //inserto como ultimo hijo cada hijo
+	}
+}
+
 Node* DOM_Tree :: copiarNodos(Node *p){
 	Node *nuevo;
 	if (p == NULL){
@@ -28,6 +39,16 @@ DOM_Tree& DOM_Tree :: operator=(const DOM_Tree& A){ //sobrecarga asignacion
 		this->doc=copiarNodos(A.doc);
 	}
 	return *this;
+}
+
+void DOM_Tree :: appendChild(string cHtml, int p){
+	int i=0; //i indica la posicion del string
+	appendChild(createTree(cHtml,i),p);
+}
+
+void DOM_Tree :: appendChild(string cHtml){
+	int i=0; //i indica la posicion del string
+	appendChild(createTree(cHtml,i));
 }
 
 void DOM_Tree :: appendChild(DOM_Tree DT){
@@ -96,6 +117,33 @@ void DOM_Tree :: removeChild(int p){
 	updateDoc();
 }
 
+void DOM_Tree :: replaceChild(DOM_Tree DT, int p){
+	Node *aux, *elim;
+	int i;
+	
+	if(p == 1){
+		elim = raiz->firstChild();
+		raiz->setFirstChild(copiarNodos(DT.raiz->firstChild()));
+	}else{
+		aux = raiz->firstChild();
+		i=2;
+		while(i <= p-1){
+			aux = aux->nextSibling();
+			i++;
+		}
+		elim = aux->nextSibling();
+		aux->setNextSibling(copiarNodos(DT.raiz->firstChild()));
+	}
+	elim->setNextSibling(NULL);
+	destruirNodos(elim);
+	updateDoc();
+}
+
+void DOM_Tree :: replaceChild(string cHtml, int p){
+	int i=0;
+	replaceChild(createTree(cHtml,i),p);
+}
+
 void DOM_Tree :: destruirNodos(Node*& p){
 	Node *aux;
 	if(p != NULL){
@@ -135,7 +183,7 @@ DOM_Tree DOM_Tree :: childNode(int p){
 	
 }
 
-DOM_Tree DOM_Tree :: createTree (string html, int &i){
+DOM_Tree DOM_Tree :: createTree (string& html, int &i){
 	DOM_Tree T;
 	Element e;
 	int j;
@@ -143,6 +191,7 @@ DOM_Tree DOM_Tree :: createTree (string html, int &i){
 	list<string> attL;
 	
 	T.raiz = new Node ();
+	updateDoc();
 	
 	if( html.at(i) == '<' ){ //si abre <
 		i++; //se coloca en la siguiente posicion
@@ -208,9 +257,9 @@ DOM_Tree DOM_Tree :: createTree (string html, int &i){
 					}
 					
 				}else{ //si el caracter en la pos j no es un /
-					T.appendChild(createTree(html,i); //llama recursivamente y agrega el arbol como ultimo hijo
+					T.appendChild(createTree(html,i)); //llama recursivamente y agrega el arbol como ultimo hijo
 				}
-				i++
+				i++;
 			}
 			
 		}
