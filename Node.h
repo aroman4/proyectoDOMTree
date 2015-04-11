@@ -17,6 +17,7 @@ class Node {
 		void setElement(Element elem){e = elem;}
 		void setFirstChild (Node* hiz) {firstCh = hiz;}
 		void setNextSibling (Node* hde) {nextSib = hde;}
+		void appendNode(Node* pt);
 };
 
 
