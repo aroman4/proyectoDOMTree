@@ -22,7 +22,7 @@ class DOM_Tree{
 	public:
 		DOM_Tree();
 		DOM_Tree(Element elem, list<DOM_Tree> L); //Parametro Elem y una lista con sus hijos
-		DOM_Tree(const DOM_Tree& DT) {doc = copiarNodos(DT.doc);}
+		DOM_Tree(const DOM_Tree& DT) {raiz = copiarNodos(DT.raiz);updateDoc();}
 		DOM_Tree& operator=(const DOM_Tree& A);
 		void appendChild(DOM_Tree DT, int p); //Agrega un arbol como hijo en la posicion indicada
 		void appendChild(string cHtml, int p); //Agrega un hijo a partir de codigo HTML en la posicion indicada
@@ -32,9 +32,9 @@ class DOM_Tree{
 		void replaceChild(DOM_Tree DT, int p); //reemplaza el arbol de la posicion indicada
 		void replaceChild(string cHtml, int p); //reemplaza el arbol de la posicion indicada
 		DOM_Tree childNode(int p); //devuelve el hijo correspondiente a la posicion p del arbol
-		DOM_Tree getElementByID (string ID); //cada element tiene un id
+		DOM_Tree getElementByID (string ID); //devuelve el subarbol cuya raiz es el element que tenga el ID dado
 		friend ostream &operator<<(ostream &output,DOM_Tree &T);
-		~DOM_Tree(){destruirNodos(doc);}
+		//~DOM_Tree(){destruirNodos(doc);} //el destructor provoca violacion de segmento...
 };
 
 
