@@ -16,7 +16,9 @@ class DOM_Tree{
 		void updateDoc(){doc->setFirstChild(raiz);}
 		DOM_Tree createTree (string& html); //crea un arbol a partir de codigo html
 		Node* createNode (string& html, int &i);
-		void viewTree(Node *p);
+		void viewTree(Node *p); //imprime por pantalla el codigo
+		void viewTree() {viewTree(raiz);}
+		Node* posElem (string ID, Node* P); //busca y devuelve la direccion del elemento si se encuentra en el arbol
 	public:
 		DOM_Tree();
 		DOM_Tree(Element elem, list<DOM_Tree> L); //Parametro Elem y una lista con sus hijos
@@ -31,7 +33,7 @@ class DOM_Tree{
 		void replaceChild(string cHtml, int p); //reemplaza el arbol de la posicion indicada
 		DOM_Tree childNode(int p); //devuelve el hijo correspondiente a la posicion p del arbol
 		DOM_Tree getElementByID (string ID); //cada element tiene un id
-		void viewTree() {viewTree(raiz);}
+		friend ostream &operator<<(ostream &output,DOM_Tree &T);
 		~DOM_Tree(){destruirNodos(doc);}
 };
 
