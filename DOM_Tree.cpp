@@ -265,3 +265,36 @@ DOM_Tree DOM_Tree :: createTree (string& html, int &i){
 		}
 	}
 }
+
+void DOM_Tree :: viewTree(Node *p){
+	Element e;
+	list<string> attL;
+	
+	if(p != NULL){
+		e = p->element(); //obtengo el element
+		
+		cout << "<" << e.tagName();
+		if(e.ID() != e.tagName()){ //si existe ID se imprime
+			cout << " id=\"" << e.ID() << "\"";
+		}
+		
+		attL = e.attributeList(); //asigno a attL la lista de atributos
+		if(!attL.empty()){ //si la lista de atributos no es vacia
+			list<string>::iterator it;
+			for (it = attL.begin(); it != attL.end(); it++){
+				cout << " ";
+				cout << *it;
+			}
+		}
+		cout << ">";
+		if(!e.innerHTML().empty()){ //si existe inner HTML
+			cout << e.innerHTML();
+		}else{ //si no existe innerhtml
+			cout << "\n\t";
+		}
+		viewTree(p->firstChild());
+		cout << "</" << e.tagName() << ">" << endl;
+		viewTree(p->nextSibling());
+		
+	}
+}
